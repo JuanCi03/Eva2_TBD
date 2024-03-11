@@ -1,0 +1,95 @@
+MySQL Shell 8.0.36
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect mc-- root@localhost
+Creating a session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 9 (X protocol)
+Server version: 8.0.36 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:33060+ ssl  SQL > use tbd_2;
+Default schema set to `tbd_2`.
+Fetching global names, object names from `tbd_2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:33060+ ssl  tbd_2  SQL > show tables;
++-----------------+
+| Tables_in_tbd_2 |
++-----------------+
+| clientes        |
+| direcciones     |
++-----------------+
+2 rows in set (0.0015 sec)
+ MySQL  localhost:33060+ ssl  tbd_2  SQL > create database orders;
+Query OK, 1 row affected (0.0121 sec)
+ MySQL  localhost:33060+ ssl  tbd_2  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| agencia            |
+| information_schema |
+| mysql              |
+| orders             |
+| ordinario          |
+| performance_schema |
+| sakila             |
+| sys                |
+| tbd_1              |
+| tbd_2              |
+| world              |
++--------------------+
+11 rows in set (0.0020 sec)
+ MySQL  localhost:33060+ ssl  tbd_2  SQL > use orders;
+Default schema set to `orders`.
+Fetching global names, object names from `orders` for auto-completion... Press ^C to stop.
+ MySQL  localhost:33060+ ssl  orders  SQL > create table customers(id int not null auto_increment, last_name varchar(50) not null, first_name varchar(50) not null,
+                                         -> company_name varchar(50), street1 varchar(50), street2 varchar(50), city varchar(50), state varchar(50),
+                                         -> zipcode int, phone varchar(50), fax varchar(50), email varchar(50));
+ERROR: 1075: Incorrect table definition; there can be only one auto column and it must be defined as a key
+ MySQL  localhost:33060+ ssl  orders  SQL > create table customers(id int not null key auto_increment, last_name varchar(50) not null, first_name varchar(50) not null, company_name varchar(50), street1 varchar(50), street2 varchar(50), city varchar(50), state varchar(50),  zipcode int, phone varchar(50), fax varchar(50), email varchar(50));
+Query OK, 0 rows affected (0.0288 sec)
+ MySQL  localhost:33060+ ssl  orders  SQL > create table salesreps(id int key not null auto_increment, last_name varchar(50) not null, first_name varchar(50) not null, commission float not null);
+Query OK, 0 rows affected (0.0274 sec)
+ MySQL  localhost:33060+ ssl  orders  SQL > drop table salesreps;
+Query OK, 0 rows affected (0.0312 sec)
+ MySQL  localhost:33060+ ssl  orders  SQL > create table salesreps(id int key not null auto_increment, last_name varchar(50) not null, first_name varchar(50) not null, commission float not null);
+Query OK, 0 rows affected (0.0259 sec)
+ MySQL  localhost:33060+ ssl  orders  SQL > create table orders(id int key not null auto_increment, C_ID int not null, order_date date not null, ship_date date, paid_date date, status boolean);
+Query OK, 0 rows affected (0.0287 sec)
+ MySQL  localhost:33060+ ssl  orders  SQL > create table items(o_id int not null, id int key not null auto_increment, p_id int not null, quantity int not null);
+Query OK, 0 rows affected (0.0176 sec)
+ MySQL  localhost:33060+ ssl  orders  SQL > create table parts(id int not null key auto_increment, description varchar(100) not null, unit_price int not null, on_hand boolean not null, reorder boolean not null);
+Query OK, 0 rows affected (0.0251 sec)
+ MySQL  localhost:33060+ ssl  orders  SQL > alter table customers add constraint foreign key(s_id) on delete cascade on update cascade;
+ERROR: 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'on delete cascade on update cascade' at line 1
+ MySQL  localhost:33060+ ssl  orders  SQL > alter table customers add constraint foreign key(s_id) references salesreps on delete cascade on update cascade;
+ERROR: 1072: Key column 's_id' doesn't exist in table
+ MySQL  localhost:33060+ ssl  orders  SQL > alter table customers add constraint foreign key(s_id) references salesreps(id) on delete cascade on update cascade;
+ERROR: 1072: Key column 's_id' doesn't exist in table
+ MySQL  localhost:33060+ ssl  orders  SQL > alter table customers add s_id int;
+Query OK, 0 rows affected (0.0251 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  orders  SQL > alter table customers add constraint foreign key(s_id) references salesreps(id) on delete cascade on update cascade;
+Query OK, 0 rows affected (0.1275 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  orders  SQL > alter table orders add constraint foreign key(id) references customers(id) on delete cascade on update cascade;
+Query OK, 0 rows affected (0.0550 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  orders  SQL > alter table items add constraint foreign key(id) references customer(id) on delete cascade on update cascade;
+ERROR: 1824: Failed to open the referenced table 'customer'
+ MySQL  localhost:33060+ ssl  orders  SQL > alter table items add constraint foreign key(id) references orders(id) on delete cascade on update cascade;
+Query OK, 0 rows affected (0.0544 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  orders  SQL > alter table items add constraint foreign key(id) references parts(id) on delete cascade on update cascade;
+Query OK, 0 rows affected (0.0749 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  orders  SQL >
