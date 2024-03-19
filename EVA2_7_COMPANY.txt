@@ -1,0 +1,101 @@
+EVA2_7_COMPANY
+
+MySQL Shell 8.0.36
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect mc-- root@localhost;
+Creating a session to 'root@localhost;'
+Please provide the password for 'root@localhost;': ********
+MySQL Error 2005: No such host is known 'localhost;'
+ MySQL  SQL > \connect mc-- root@localhost
+Creating a session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 9 (X protocol)
+Server version: 8.0.36 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:33060+ ssl  SQL > use company;
+Default schema set to `company`.
+Fetching global names, object names from `company` for auto-completion... Press ^C to stop.
+ MySQL  localhost:33060+ ssl  company  SQL > INSERT INTO Employee (EmployeeId, FullName, Technology, Salary, Gender, Age)  VALUES (1009, 'John Doe', 'Python', 35000, 'Male', 25), (1010, 'Mary Smith', 'JavaScript', 45000, 'Female', 27)
+                                          ->  ;
+Query OK, 2 rows affected (0.0340 sec)
+
+Records: 2  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  company  SQL > INSERT INTO Employee (EmployeeId, FullName, Technology, Salary, Gender, Age)  VALUES (1008, 'John Doe', 'PASCAL', 35000, 'Male', 25);
+Query OK, 1 row affected (0.0101 sec)
+ MySQL  localhost:33060+ ssl  company  SQL > INSERT INTO Projects (ProjectName, EmployeeId, StartDate, EndDate)  VALUES ('Develop Ecommerse Website from scratch', 1003, NOW(), DATE_ADD(NOW(), INTERVAL 30 DAY)), ('WordPress Website for our company', 1002, NOW(), DATE_ADD(NOW(), INTERVAL 45 DAY)), ('Manage our Company Servers', 1007, NOW(), DATE_ADD(NOW(), INTERVAL 45 DAY)), ('Hosting account is not working', 1009, NOW(), DATE_ADD(NOW(), INTERVAL 7 DAY)), ('MySQL database from my desktop application', 1010, NOW(), DATE_ADD(NOW(), INTERVAL 15 DAY)), ('Develop new WordPress plugin for my business website', NULL, NOW(), DATE_ADD(NOW(), INTERVAL 10 DAY)), ('Migrate web application and database to new server', NULL, NOW(), DATE_ADD(NOW(), INTERVAL 5 DAY)), ('Android Application development', 1004, NOW(), DATE_ADD(NOW(), INTERVAL 30 DAY)), ('Hosting account is not working', 1001, NOW(), DATE_ADD(NOW(), INTERVAL 7 DAY)), ('MySQL database from my desktop application', 1008, NOW(), DATE_ADD(NOW(), INTERVAL 15 DAY)), ('Develop new WordPress plugin for my business website', NULL, NOW(), DATE_ADD(NOW(), INTERVAL 10 DAY));
+Query OK, 11 rows affected (0.0081 sec)
+
+Records: 11  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  company  SQL > CREATE TABLE Address(
+                                          ->                                          AddressId INT PRIMARY KEY AUTO_INCREMENT,
+                                          ->                                          EmployeeId INT,
+                                          ->                                          Country VARCHAR(50),
+                                          ->                                          State VARCHAR(50),
+                                          ->                                          City VARCHAR(50),
+                                          ->                                         FOREIGN KEY (EmployeeId) REFERENCES Employee(EmployeeId));
+Query OK, 0 rows affected (0.0941 sec)
+ MySQL  localhost:33060+ ssl  company  SQL > INSERT INTO Address (EmployeeId, Country, State, City)
+                                          ->                                         Values (1001, 'India', 'Odisha', 'BBSR'),
+                                          ->                                         (1002, 'India', 'Maharashtra', 'Mumbai'),
+                                          ->                                         (1003, 'India', 'Maharashtra', 'Pune'),
+                                          ->                                          (1004, 'India', 'Odisha', 'Cuttack'),
+                                          ->                                          (1005, 'India', 'Maharashtra', 'Nagpur'),
+                                          ->                                         (1006, 'India', 'Odisha', 'BBSR');
+Query OK, 6 rows affected (0.0315 sec)
+
+Records: 6  Duplicates: 0  Warnings: 0
+ MySQL  localhost:33060+ ssl  company  SQL > select * from projectsM
+                                          -> ;
+ERROR: 1146: Table 'company.projectsm' doesn't exist
+ MySQL  localhost:33060+ ssl  company  SQL > select * from projects;
++-----------+------------------------------------------------------+------------+---------------------+---------------------+
+| ProjectId | ProjectName                                          | EmployeeId | StartDate           | EndDate             |
++-----------+------------------------------------------------------+------------+---------------------+---------------------+
+|        11 | Develop Ecommerse Website from scratch               |       1003 | 2024-03-19 17:27:55 | 2024-04-18 17:27:55 |
+|        12 | WordPress Website for our company                    |       1002 | 2024-03-19 17:27:55 | 2024-05-03 17:27:55 |
+|        13 | Manage our Company Servers                           |       1007 | 2024-03-19 17:27:55 | 2024-05-03 17:27:55 |
+|        14 | Hosting account is not working                       |       1009 | 2024-03-19 17:27:55 | 2024-03-26 17:27:55 |
+|        15 | MySQL database from my desktop application           |       1010 | 2024-03-19 17:27:55 | 2024-04-03 17:27:55 |
+|        16 | Develop new WordPress plugin for my business website |       NULL | 2024-03-19 17:27:55 | 2024-03-29 17:27:55 |
+|        17 | Migrate web application and database to new server   |       NULL | 2024-03-19 17:27:55 | 2024-03-24 17:27:55 |
+|        18 | Android Application development                      |       1004 | 2024-03-19 17:27:55 | 2024-04-18 17:27:55 |
+|        19 | Hosting account is not working                       |       1001 | 2024-03-19 17:27:55 | 2024-03-26 17:27:55 |
+|        20 | MySQL database from my desktop application           |       1008 | 2024-03-19 17:27:55 | 2024-04-03 17:27:55 |
+|        21 | Develop new WordPress plugin for my business website |       NULL | 2024-03-19 17:27:55 | 2024-03-29 17:27:55 |
++-----------+------------------------------------------------------+------------+---------------------+---------------------+
+11 rows in set (0.0014 sec)
+ MySQL  localhost:33060+ ssl  company  SQL > select * from address;
++-----------+------------+---------+-------------+---------+
+| AddressId | EmployeeId | Country | State       | City    |
++-----------+------------+---------+-------------+---------+
+|         1 |       1001 | India   | Odisha      | BBSR    |
+|         2 |       1002 | India   | Maharashtra | Mumbai  |
+|         3 |       1003 | India   | Maharashtra | Pune    |
+|         4 |       1004 | India   | Odisha      | Cuttack |
+|         5 |       1005 | India   | Maharashtra | Nagpur  |
+|         6 |       1006 | India   | Odisha      | BBSR    |
++-----------+------------+---------+-------------+---------+
+6 rows in set (0.0011 sec)
+ MySQL  localhost:33060+ ssl  company  SQL > select * from employee;
++------------+-------------------+------------+--------+--------+-----+
+| EmployeeId | FullName          | Technology | Salary | Gender | Age |
++------------+-------------------+------------+--------+--------+-----+
+|       1001 | John Doe          | Java       |  35000 | Male   |  25 |
+|       1002 | Mary Smith        | Java       |  45000 | Female |  27 |
+|       1003 | James Brown       | Java       |  50000 | Male   |  28 |
+|       1004 | Mike Walker       | .NET       |  50000 | Male   |  28 |
+|       1005 | Linda Jones       | .NET       |  75000 | Female |  26 |
+|       1006 | Anurag Mohanty    | .NET       |  35000 | Male   |  25 |
+|       1007 | Priyanla Dewangan | .NET       |  45000 | Female |  27 |
+|       1008 | John Doe          | PASCAL     |  35000 | Male   |  25 |
+|       1009 | John Doe          | Python     |  35000 | Male   |  25 |
+|       1010 | Mary Smith        | JavaScript |  45000 | Female |  27 |
++------------+-------------------+------------+--------+--------+-----+
+10 rows in set (0.0034 sec)
